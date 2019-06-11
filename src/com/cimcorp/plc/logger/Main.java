@@ -42,47 +42,46 @@ public class Main {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		ReentrantLock lock = new ReentrantLock();
-		List<String> list = new ArrayList<String>();
-		
-		Thread udp = new Thread(new UDPServer(config, lock, list), "UDP Server");
+
+		Message msg = new Message();
+
+		Thread udp = new Thread(new UDPServer(config, msg), "UDP Server");
 		udp.start();
+
+
 		
 		while (true) {
 			
-			String t = "";
-			
-			if (!lock.isLocked()) {
-				
-				if (!list.isEmpty()) {
-					
-					while (lock.isLocked()) {}
-					lock.lock();
-					t = list.get(0);
-					list.remove(0);
-					lock.unlock();
-					
-					int s = t.indexOf(STX);
-					int x = t.indexOf(ETX);
-					
-					if ((s == 0) && (x > 10)) {
-						t = t.substring(2,x);
-					}
-					else {
-						t = t.concat(" RX_ERROR: MAL-FORMED");
-					}
-					
-					try {
-						log.appendLine(t);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					System.out.println(t);
-					
+			synchronized (msg) {
+				try {
+					msg.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-				
 			}
+
+			String t = msg.getNextMsg();
+
+			int s = t.indexOf(STX);
+			int x = t.indexOf(ETX);
+
+			if ((s == 0) && (x > 10)) {
+				t = t.substring(2,x);
+			}
+			else {
+				t = t.concat(" RX_ERROR: MAL-FORMED");
+			}
+
+			try {
+				log.appendLine(t);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println(t);
+					
+
+				
+
 			
 		}
 		

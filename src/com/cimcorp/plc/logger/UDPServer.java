@@ -10,13 +10,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class UDPServer implements Runnable{
 
 	private Config config;
-	private ReentrantLock lock;
-	private List<String> list;
+	private Message msg;
 	
-	public UDPServer(Config c, ReentrantLock l, List<String> s) {
+	public UDPServer(Config c, Message msg) {
 		this.config = c;
-		this.lock = l;
-		this.list = s;
+		this.msg = msg;
 	}
 	
 	@Override
@@ -42,20 +40,14 @@ public class UDPServer implements Runnable{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+
         	String r = new String(receivePacket.getData());
-        	
-        	while (lock.isLocked()) {}
-        	lock.lock();
-        	list.add(r);
-        	lock.unlock();
-        	
-        	
-        }
+
+			msg.addMsg(r);
+			synchronized (msg){
+				msg.notify();
+			}
+		}
 		
 	}
-	
-	public boolean isLocked() {
-		return lock.isLocked();
-	}
-
 }

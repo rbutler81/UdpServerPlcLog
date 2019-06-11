@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="UdpServerPlcLog:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/UdpServerPlcLog_jar</output-path>
+    <root id="archive" name="UdpServerPlcLog.jar">
+      <element id="module-output" name="UdpServerPlcLog" />
+    </root>
+  </artifact>
+</component>
