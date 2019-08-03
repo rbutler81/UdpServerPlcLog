@@ -59,30 +59,31 @@ public class Main {
 					e.printStackTrace();
 				}
 			}
+			
+			while (!msg.isEmpty()) {
 
-			String t = msg.getNextMsg();
-
-			int s = t.indexOf(STX);
-			int x = t.indexOf(ETX);
-
-			if ((s == 0) && (x > 10)) {
-				t = t.substring(2,x);
+				String t = msg.getNextMsg();
+	
+				int s = t.indexOf(STX);
+				int x = t.indexOf(ETX);
+	
+				if ((s == 0) && (x > 10)) {
+					t = t.substring(2,x);
+				}
+				else {
+					t = t.concat(" RX_ERROR: MAL-FORMED");
+				}
+	
+				try {
+					log.appendLine(t);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				System.out.println(t);
+				
 			}
-			else {
-				t = t.concat(" RX_ERROR: MAL-FORMED");
-			}
-
-			try {
-				log.appendLine(t);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			System.out.println(t);
 					
 
-				
-
-			
 		}
 		
 		

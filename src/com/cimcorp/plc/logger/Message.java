@@ -29,4 +29,12 @@ public class Message {
         l.unlock();
         return this;
     }
+    
+    public boolean isEmpty() {
+    	while (l.isLocked()){}
+    	l.lock();
+        boolean r = msg.isEmpty();
+    	l.unlock();
+    	return r;
+    }
 }
