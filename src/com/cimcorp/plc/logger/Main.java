@@ -2,13 +2,12 @@ package com.cimcorp.plc.logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
+
 
 public class Main {
 	
-	static String path = new File("").getAbsolutePath().concat("\\");
+	static String ver = "1.0";
+    static String path = new File("").getAbsolutePath().concat("\\");
 	static String logFileName = "PLC.log";
 	static String topLine = "Date/Time,Id,Level,Colour,Header,Description";
 	static String ETX = ",";
@@ -49,6 +48,7 @@ public class Main {
 		udp.start();
 
 
+        System.out.println ("PLC Logger v" + ver);
 		
 		while (true) {
 			
