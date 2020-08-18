@@ -8,16 +8,19 @@ public class Main {
 	
 	static String ver = "1.0";
     static String path = new File("").getAbsolutePath().concat("\\");
+    static String bitmapPath = path + "BMP\\";
 	static String logFileName = "PLC.log";
 	static String topLine = "Date/Time,Id,Level,Colour,Header,Description";
 	static String ETX = ",";
 	static String STX = ",";
 	static File configFile = new File(path.concat("config.ini"));
+	static String bitmapHeader = ",BMP,";
 	
 	
 	public static void main(String[] args) {
-		
+
 		Config config = null;
+		BitmapHandler bh = new BitmapHandler(bitmapPath);
 		
 		if (configFile.exists()) {
 			
@@ -79,6 +82,12 @@ public class Main {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+
+				if (t.contains(bitmapHeader)) {
+
+					bh.parseLine(t);
+				}
+
 				System.out.println(t);
 				
 			}
