@@ -84,10 +84,8 @@ public class Main {
 				}
 
 				if (t.contains(bitmapHeader)) {
-
 					bh.parseLine(t);
 				}
-
 				System.out.println(t);
 				
 			}

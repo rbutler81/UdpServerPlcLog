@@ -2,7 +2,6 @@ package com.cimcorp.plc.logger;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -38,37 +37,38 @@ public class BitmapHandler {
             int rb = s.indexOf("]");
             String filename = s.substring(lb+1,rb);
 
+            BufferedImage img = null;
             for (Bitmap b : bitmaps) {
                 if (b.getFilename().equals(path + filename)) {
-                    BufferedImage img = b.complete();
-                    // write to disk
-                    Path p = Paths.get(path);
-                    if (!Files.exists(p)) {
-                        try {
-                            Files.createDirectories(p);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    File file = new File(path + filename + ".bmp");
-                    try {
-                        ImageIO.write(img,"BMP", file);
-
-                        for (int i = 0; i < bitmaps.size(); i++) {
-                            if (bitmaps.get(i).getFilename().equals(path + filename)) {
-                                bitmaps.remove(i);
-                                break;
-                            }
-                        }
-                        System.out.println();
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+                    img = b.complete();
+                    break;
                 }
             }
+
+            // write to disk
+            Path p = Paths.get(path);
+            if (!Files.exists(p)) {
+                try {
+                    Files.createDirectories(p);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            File file = new File(path + filename + ".bmp");
+            try {
+                ImageIO.write(img,"BMP", file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            for (int i = 0; i < bitmaps.size(); i++) {
+                if (bitmaps.get(i).getFilename().equals(path + filename)) {
+                    bitmaps.remove(i);
+                    break;
+                }
+            }
+
         }
 
         else {
