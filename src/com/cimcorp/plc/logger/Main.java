@@ -72,25 +72,30 @@ public class Main {
 	
 				if ((s == 0) && (x > 10)) {
 					t = t.substring(2,x);
+
+					try {
+						if (t.contains(bitmapHeader)) {
+							bh.parseLine(t);
+						} else {
+							log.appendLine(t);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 				else {
 					t = t.concat(" RX_ERROR: MAL-FORMED");
-				}
-	
-				try {
-					log.appendLine(t);
-				} catch (IOException e) {
-					e.printStackTrace();
+					try {
+						log.appendLine(t);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 
-				if (t.contains(bitmapHeader)) {
-					bh.parseLine(t);
-				}
 				System.out.println(t);
+
 				
 			}
-					
-
 		}
 		
 		
