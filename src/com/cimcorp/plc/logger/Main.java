@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class Main {
 	
-	static String ver = "2.1";
+	static String ver = "2.2";
     static String path = new File("").getAbsolutePath().concat("\\");
     static String bitmapPath = path + "BMP\\";
 	static String logFileName = "PLC.log";
@@ -97,9 +97,5 @@ public class Main {
 				
 			}
 		}
-		
-		
-		
 	}
-
 }

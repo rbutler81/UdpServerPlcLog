@@ -31,8 +31,7 @@ public class BitmapHandler {
 
             bitmaps.add(new Bitmap(path + filename, Integer.parseInt(xRes), Integer.parseInt(yRes)));
 
-        }
-        else if (s.contains("STOP")) {
+        } else if (s.contains("STOP")) {
             int lb = s.indexOf("[");
             int rb = s.indexOf("]");
             String filename = s.substring(lb+1,rb);
@@ -57,37 +56,43 @@ public class BitmapHandler {
 
             File file = new File(path + filename + ".bmp");
             try {
-                ImageIO.write(img,"BMP", file);
+                file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            for (int i = 0; i < bitmaps.size(); i++) {
-                if (bitmaps.get(i).getFilename().equals(path + filename)) {
-                    bitmaps.remove(i);
-                    break;
+            if (file.exists()) {
+                if (file.canWrite()) {
+
+                    try {
+                        ImageIO.write(img, "BMP", file);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    for (int i = 0; i < bitmaps.size(); i++) {
+                        if (bitmaps.get(i).getFilename().equals(path + filename)) {
+                            bitmaps.remove(i);
+                            break;
+                        }
+                    }
                 }
             }
 
-        }
+        }  else {
+                int lb = s.indexOf("[");
+                int rb = s.indexOf("]");
+                int header = s.indexOf(",BMP,") + 5;
+                String filename = s.substring(header,lb);
+                String lineNumber = s.substring(lb+1,rb);
+                String data = s.substring(rb+1);
 
-        else {
-            int lb = s.indexOf("[");
-            int rb = s.indexOf("]");
-            int header = s.indexOf(",BMP,") + 5;
-            String filename = s.substring(header,lb);
-            String lineNumber = s.substring(lb+1,rb);
-            String data = s.substring(rb+1);
-
-            for (Bitmap b : bitmaps) {
-                if (b.getFilename().equals(path + filename)) {
-                    b.addLine(Integer.parseInt(lineNumber), data);
+                for (Bitmap b : bitmaps) {
+                    if (b.getFilename().equals(path + filename)) {
+                        b.addLine(Integer.parseInt(lineNumber), data);
+                    }
                 }
-            }
         }
 
     }
-
-
-
 }

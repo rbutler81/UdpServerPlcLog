@@ -28,6 +28,7 @@ public class Config  {
 	public int getPort() {
 		return port;
 	}
+
 	public Config setPort(int port) throws ConfigException {
 		
 		if (port > 0 && port <= 65535) {
@@ -42,6 +43,7 @@ public class Config  {
 	public int getMaxLogSizeBytes() {
 		return maxLogSizeBytes;
 	}
+
 	public Config setMaxLogSizeBytes(int maxLogSizeBytes) throws ConfigException {
 		
 		if (maxLogSizeBytes > 0) {
@@ -55,6 +57,7 @@ public class Config  {
 	public int getOldLogsToKeep() {
 		return oldLogsToKeep;
 	}
+
 	public Config setOldLogsToKeep(int oldLogsToKeep) throws ConfigException {
 		
 		if (oldLogsToKeep >= 1) {
@@ -76,7 +79,7 @@ public class Config  {
 			
 			BufferedReader br = new BufferedReader(new FileReader(str));
 			String line = br.readLine();
-			List<String> p = new ArrayList<String>();
+			List<String> p = new ArrayList<>();
 			p.add(line);
 			
 			
