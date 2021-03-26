@@ -58,7 +58,9 @@ public class Main {
 
         System.out.println ("PLC Logger v" + ver);
 		
-		while (true) {
+		// stay in this loop forever - UDP packets are handed to this loop from another thread
+		// they're either logged, or if they're a bitmap file handed off to the bitmapHandler
+        while (true) {
 			
 			synchronized (msg) {
 				try {
