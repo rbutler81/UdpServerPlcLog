@@ -2,11 +2,16 @@ package com.cimcorp.plc.logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class Main {
 	
-	static String ver = "2.2";
+	static String ver = "2.3";
     static String path = new File("").getAbsolutePath().concat("\\");
     static String bitmapPath = path + "BMP\\";
 	static String logFileName = "PLC.log";
@@ -20,8 +25,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		Config config = null;
-		BitmapHandler bh = new BitmapHandler(bitmapPath);
-		
+
 		if (configFile.exists()) {
 			
 			try {
@@ -31,12 +35,13 @@ public class Main {
 				System.exit(0);
 			}
 			
-		}
-		else {
+		} else {
 			System.out.println ("Error: Config File not Found");
 			System.exit(0);
 		}
-		
+
+		BitmapHandler bh = new BitmapHandler(bitmapPath, config);
+
 		Log log = null;
 		
 		try {

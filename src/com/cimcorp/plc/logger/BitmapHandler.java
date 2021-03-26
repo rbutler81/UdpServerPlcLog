@@ -4,19 +4,25 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class BitmapHandler {
 
     String path;
+    Config config;
     List<Bitmap> bitmaps = new ArrayList<>();
 
-    public BitmapHandler(String path) {
+    public BitmapHandler(String path, Config config) {
         this.path = path;
+        this.config = config;
     }
 
     public void parseLine(String s) {
@@ -75,6 +81,32 @@ public class BitmapHandler {
                             bitmaps.remove(i);
                             break;
                         }
+                    }
+                }
+            }
+
+            // make a list of bmp files contained in the bitmap folder
+            File[] files = new File(path).listFiles();
+            List<File> bitmapList = new ArrayList<>();
+            for (int i = 0; i < files.length; i++) {
+
+                if (Pattern.compile(Pattern.quote(".bmp"), Pattern.CASE_INSENSITIVE).matcher(files[i].getName()).find()) {
+                    bitmapList.add(files[i]);
+                }
+            }
+
+            // check if the number of bitmaps on the disk is greater than the configured amount - if so, delete the oldest ones first
+            if (bitmapList.size() > config.getBitmapsToKeep()) {
+
+                File[] bitmapFiles = new File[bitmapList.size()];
+                bitmapList.toArray(bitmapFiles);
+                Arrays.sort(bitmapFiles, Comparator.comparingLong(File::lastModified));
+                int numberOfFilesToDelete = bitmapList.size() - config.getBitmapsToKeep();
+                for (int i = 0; i < numberOfFilesToDelete; i++) {
+                    try {
+                        bitmapFiles[i].delete();
+                    } catch(Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }

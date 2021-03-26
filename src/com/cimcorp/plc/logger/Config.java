@@ -10,14 +10,16 @@ public class Config  {
 	private int port;
 	private int maxLogSizeBytes;
 	private int oldLogsToKeep;
-	
-	
-	public Config(int port, int maxLogSizeBytes, int oldLogsToKeep) throws ConfigException {
+	private int bitmapsToKeep;
+
+
+	public Config(int port, int maxLogSizeBytes, int oldLogsToKeep, int bitmapsToKeep) throws ConfigException {
 		
 		try {
 			this.setPort(port);
 			this.setMaxLogSizeBytes(maxLogSizeBytes);
 			this.setOldLogsToKeep(oldLogsToKeep);
+			this.setBitmapsToKeep(bitmapsToKeep);
 		}
 		catch (ConfigException e) {
 			throw e;
@@ -40,6 +42,7 @@ public class Config  {
 		}
 		
 	}
+
 	public int getMaxLogSizeBytes() {
 		return maxLogSizeBytes;
 	}
@@ -68,12 +71,27 @@ public class Config  {
 			throw new ConfigException("oldLogsToKeep must be greater to, or equal to 1");
 		}
 	}
+
+	public int getBitmapsToKeep() { return bitmapsToKeep;}
+
+	public Config setBitmapsToKeep(int bitmapsToKeep) throws ConfigException {
+
+		if (bitmapsToKeep > 0) {
+			this.bitmapsToKeep = bitmapsToKeep;
+			return this;
+		}
+		else {
+			throw new ConfigException("bitmapsToKeep must be greater to, or equal to 1");
+		}
+
+	}
 	
 	static Config fromFile(String str) throws ConfigException{
 		
 		int port = 0;
 		int maxBytes = 0;
-		int maxOld = 0;		
+		int maxOld = 0;
+		int maxBitmaps = 0;
 		
 		try {
 			
@@ -102,6 +120,9 @@ public class Config  {
 						else if (s.startsWith("#oldLogsToKeep=")) {
 							maxOld = Integer.parseInt(s.substring(15));
 						}
+						else if (s.startsWith("#bitmapsToKeep=")) {
+							maxBitmaps = Integer.parseInt(s.substring(15));
+						}
 					
 					}
 			}
@@ -110,7 +131,7 @@ public class Config  {
 			e.printStackTrace();
 		}
 		
-		return new Config(port, maxBytes, maxOld);
+		return new Config(port, maxBytes, maxOld, maxBitmaps);
 		
 	}
 	
