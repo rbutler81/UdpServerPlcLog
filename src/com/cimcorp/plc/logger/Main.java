@@ -2,12 +2,6 @@ package com.cimcorp.plc.logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.regex.Pattern;
-
 
 public class Main {
 	
@@ -61,7 +55,7 @@ public class Main {
 		// stay in this loop forever - UDP packets are handed to this loop from another thread
 		// they're either logged, or if they're a bitmap file handed off to the bitmapHandler
         while (true) {
-			
+
 			synchronized (msg) {
 				try {
 					msg.wait();
